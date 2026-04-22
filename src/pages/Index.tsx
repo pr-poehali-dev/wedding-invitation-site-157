@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
-const HERO_IMAGE = "https://cdn.poehali.dev/projects/644a90fd-2005-47e5-8f2a-6e09bba79dbc/files/4680931c-68bc-4f68-8343-c49731154317.jpg";
+const HERO_IMAGE = "https://cdn.poehali.dev/files/c00b9751-aa29-4f9f-95d1-1bff2e177e39.png";
 
 export default function Index() {
   const [form, setForm] = useState({
@@ -40,52 +40,52 @@ export default function Index() {
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src={HERO_IMAGE} alt="Wedding" className="w-full h-full object-cover"
-            style={{ filter: "brightness(0.32) saturate(0.65)" }} />
+            style={{ objectFit: "cover" }} />
         </div>
 
         <div className="relative z-10 text-center px-6">
           <p className="animate-fade-in delay-100 font-golos mb-10"
-            style={{ color: "rgba(247,243,238,0.55)", fontSize: "0.7rem", letterSpacing: "0.4em", textTransform: "uppercase" }}>
+            style={{ color: "var(--muted-text)", fontSize: "0.7rem", letterSpacing: "0.4em", textTransform: "uppercase" }}>
             приглашение на свадьбу
           </p>
 
           <h1 className="animate-fade-in-up delay-200 font-cormorant font-light leading-none mb-3"
-            style={{ fontSize: "clamp(4.5rem, 13vw, 10rem)", color: "var(--cream)", letterSpacing: "-0.01em" }}>
-            Алина
+            style={{ fontSize: "clamp(4.5rem, 13vw, 10rem)", color: "var(--dark)", letterSpacing: "-0.01em" }}>
+            Дмитрий
           </h1>
 
           <p className="animate-fade-in delay-400 font-cormorant italic"
-            style={{ fontSize: "2rem", color: "rgba(184,151,106,0.75)", letterSpacing: "0.1em", margin: "0.5rem 0" }}>
+            style={{ fontSize: "2rem", color: "var(--gold)", letterSpacing: "0.1em", margin: "0.5rem 0" }}>
             &amp;
           </p>
 
           <h1 className="animate-fade-in-up delay-300 font-cormorant font-light leading-none mb-14"
-            style={{ fontSize: "clamp(4.5rem, 13vw, 10rem)", color: "var(--cream)", letterSpacing: "-0.01em" }}>
-            Михаил
+            style={{ fontSize: "clamp(4.5rem, 13vw, 10rem)", color: "var(--dark)", letterSpacing: "-0.01em" }}>
+            Алина
           </h1>
 
           <div className="animate-fade-in delay-700 flex items-center justify-center gap-5 mb-16">
-            <span style={{ width: "40px", height: "1px", background: "rgba(184,151,106,0.5)", display: "block" }} />
-            <p className="font-golos font-light" style={{ color: "rgba(247,243,238,0.7)", letterSpacing: "0.2em", fontSize: "0.85rem" }}>
-              14 июня 2025
+            <span style={{ width: "40px", height: "1px", background: "rgba(168,137,90,0.5)", display: "block" }} />
+            <p className="font-golos font-light" style={{ color: "var(--muted-text)", letterSpacing: "0.2em", fontSize: "0.85rem" }}>
+              08 августа 2026
             </p>
-            <span style={{ width: "40px", height: "1px", background: "rgba(184,151,106,0.5)", display: "block" }} />
+            <span style={{ width: "40px", height: "1px", background: "rgba(168,137,90,0.5)", display: "block" }} />
           </div>
 
           <a href="#details" className="animate-fade-in delay-900 inline-block font-golos"
             style={{
-              color: "var(--cream)", border: "1px solid rgba(184,151,106,0.5)",
+              color: "var(--dark)", border: "1px solid rgba(168,137,90,0.6)",
               padding: "13px 36px", fontSize: "0.7rem", letterSpacing: "0.15em", textTransform: "uppercase",
               transition: "all 0.35s ease"
             }}
-            onMouseEnter={e => { (e.target as HTMLElement).style.backgroundColor = "rgba(184,151,106,0.2)"; }}
+            onMouseEnter={e => { (e.target as HTMLElement).style.backgroundColor = "rgba(168,137,90,0.12)"; }}
             onMouseLeave={e => { (e.target as HTMLElement).style.backgroundColor = "transparent"; }}>
             Подробнее
           </a>
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-fade-in delay-1100"
-          style={{ color: "rgba(247,243,238,0.35)" }}>
+          style={{ color: "rgba(74,55,40,0.4)" }}>
           <Icon name="ChevronDown" size={20} />
         </div>
       </section>

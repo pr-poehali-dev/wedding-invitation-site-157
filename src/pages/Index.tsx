@@ -91,10 +91,16 @@ export default function Index() {
       </section>
 
       {/* DETAILS */}
-      <section id="details" className="py-28 px-6">
-        <div className="max-w-4xl mx-auto">
+      <section id="details" className="relative py-28 px-6 overflow-hidden">
+        {/* Акварельный фон в тематике героя */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img src="https://cdn.poehali.dev/files/c00b9751-aa29-4f9f-95d1-1bff2e177e39.png"
+            alt="" className="w-full h-full object-cover" style={{ opacity: 0.18 }} />
+        </div>
 
-          <div className="text-center mb-20">
+        <div className="relative z-10 max-w-5xl mx-auto">
+
+          <div className="text-center mb-16">
             <p className="font-golos mb-4" style={{ color: "var(--gold)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase" }}>
               детали события
             </p>
@@ -104,41 +110,128 @@ export default function Index() {
             <div className="section-divider" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: "Calendar", label: "Дата", title: "14 июня", sub: "2025 года", footer: "Суббота" },
-              { icon: "Clock", label: "Время", title: "15:00", sub: "Церемония", footer: "Банкет с 17:00" },
-              { icon: "MapPin", label: "Место", title: "Villa Rosa", sub: "Загородный клуб", footer: "Московская обл., Истра" },
-            ].map((item, i) => (
-              <div key={i} className="detail-card text-center py-12 px-8 border"
-                style={{ borderColor: "rgba(184,151,106,0.25)", backgroundColor: "rgba(255,255,255,0.5)" }}>
-                <div className="mb-6 flex justify-center">
-                  <Icon name={item.icon as "Calendar"} size={26} style={{ color: "var(--gold)" }} />
-                </div>
-                <p className="font-golos mb-3" style={{ color: "var(--muted-text)", fontSize: "0.68rem", letterSpacing: "0.25em", textTransform: "uppercase" }}>
-                  {item.label}
-                </p>
-                <p className="font-cormorant font-light text-3xl mb-1" style={{ color: "var(--dark)" }}>{item.title}</p>
-                <p className="font-cormorant italic text-xl" style={{ color: "var(--gold)" }}>{item.sub}</p>
-                <div className="mt-6 pt-5" style={{ borderTop: "1px solid rgba(184,151,106,0.18)" }}>
-                  <p className="font-golos text-sm" style={{ color: "var(--muted-text)" }}>{item.footer}</p>
+          {/* Сетка: Календарь + Детали */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+
+            {/* Календарь августа 2026 */}
+            <div className="text-center" style={{ backgroundColor: "rgba(255,255,255,0.72)", border: "1px solid rgba(168,137,90,0.22)", padding: "2rem", backdropFilter: "blur(4px)" }}>
+              <p className="font-golos mb-1" style={{ fontSize: "0.62rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--gold)" }}>
+                Август 2026
+              </p>
+              <div style={{ width: "40px", height: "1px", background: "rgba(168,137,90,0.4)", margin: "8px auto 20px" }} />
+
+              {/* Дни недели */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "2px", marginBottom: "6px" }}>
+                {["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].map(d => (
+                  <div key={d} className="font-golos text-center" style={{ fontSize: "0.6rem", color: "var(--muted-text)", letterSpacing: "0.05em", padding: "4px 0" }}>
+                    {d}
+                  </div>
+                ))}
+              </div>
+
+              {/* Дни месяца — август 2026 начинается с субботы (6-й день) */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "3px" }}>
+                {/* Пустые ячейки до 1 августа (сб = позиция 6) */}
+                {Array.from({ length: 5 }).map((_, i) => <div key={`e${i}`} />)}
+                {Array.from({ length: 31 }).map((_, i) => {
+                  const day = i + 1;
+                  const isWedding = day === 8;
+                  return (
+                    <div key={day} className="font-golos" style={{
+                      padding: "6px 2px",
+                      fontSize: "0.82rem",
+                      borderRadius: "50%",
+                      lineHeight: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      aspectRatio: "1",
+                      backgroundColor: isWedding ? "rgba(168,137,90,0.12)" : "transparent",
+                      border: isWedding ? "1px solid rgba(168,137,90,0.5)" : "none",
+                      color: isWedding ? "var(--gold)" : "var(--dark)",
+                      fontWeight: isWedding ? 500 : 400,
+                      position: "relative",
+                    }}>
+                      {day}
+                      {isWedding && (
+                        <span style={{ fontSize: "8px", lineHeight: 1, marginTop: "1px", color: "var(--gold)" }}>♥</span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Легенда */}
+              <div style={{ marginTop: "20px", paddingTop: "16px", borderTop: "1px solid rgba(168,137,90,0.18)" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+                  <div style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "rgba(168,137,90,0.5)" }} />
+                  <span className="font-golos" style={{ fontSize: "0.72rem", color: "var(--muted-text)" }}>
+                    08 августа — день нашей свадьбы
+                  </span>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Детали церемонии */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+
+              {/* Карточка: Дата */}
+              <div className="detail-card" style={{ backgroundColor: "rgba(255,255,255,0.72)", border: "1px solid rgba(168,137,90,0.22)", padding: "1.5rem 2rem", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", gap: "1.25rem" }}>
+                <div style={{ width: "44px", height: "44px", border: "1px solid rgba(168,137,90,0.4)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <Icon name="Calendar" size={20} style={{ color: "var(--gold)" }} />
+                </div>
+                <div>
+                  <p className="font-golos" style={{ fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "var(--muted-text)", marginBottom: "4px" }}>Дата</p>
+                  <p className="font-cormorant font-light" style={{ fontSize: "1.5rem", color: "var(--dark)", lineHeight: 1.1 }}>08 августа 2026</p>
+                  <p className="font-cormorant italic" style={{ fontSize: "1rem", color: "var(--gold)" }}>Суббота</p>
+                </div>
+              </div>
+
+              {/* Карточка: Церемония */}
+              <div className="detail-card" style={{ backgroundColor: "rgba(255,255,255,0.72)", border: "1px solid rgba(168,137,90,0.22)", padding: "1.5rem 2rem", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", gap: "1.25rem" }}>
+                <div style={{ width: "44px", height: "44px", border: "1px solid rgba(168,137,90,0.4)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <Icon name="Clock" size={20} style={{ color: "var(--gold)" }} />
+                </div>
+                <div>
+                  <p className="font-golos" style={{ fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "var(--muted-text)", marginBottom: "4px" }}>Церемония</p>
+                  <p className="font-cormorant font-light" style={{ fontSize: "1.5rem", color: "var(--dark)", lineHeight: 1.1 }}>16:00</p>
+                  <p className="font-golos" style={{ fontSize: "0.85rem", color: "var(--muted-text)", marginTop: "2px" }}>На открытой террасе</p>
+                </div>
+              </div>
+
+              {/* Карточка: Место */}
+              <div className="detail-card" style={{ backgroundColor: "rgba(255,255,255,0.72)", border: "1px solid rgba(168,137,90,0.22)", padding: "1.5rem 2rem", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", gap: "1.25rem" }}>
+                <div style={{ width: "44px", height: "44px", border: "1px solid rgba(168,137,90,0.4)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <Icon name="MapPin" size={20} style={{ color: "var(--gold)" }} />
+                </div>
+                <div>
+                  <p className="font-golos" style={{ fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "var(--muted-text)", marginBottom: "4px" }}>Место проведения</p>
+                  <p className="font-cormorant font-light" style={{ fontSize: "1.5rem", color: "var(--dark)", lineHeight: 1.1 }}>Отель Lotte</p>
+                  <p className="font-golos" style={{ fontSize: "0.85rem", color: "var(--muted-text)", marginTop: "2px" }}>Открытая терраса</p>
+                </div>
+              </div>
+
+              {/* Подпись */}
+              <p className="font-cormorant italic text-center" style={{ fontSize: "1.1rem", color: "var(--muted-text)", marginTop: "0.5rem" }}>
+                Церемония пройдёт в 16:00 на открытой террасе отеля Lotte
+              </p>
+
+            </div>
           </div>
 
           {/* Программа */}
           <div className="mt-20 text-center">
-            <div className="max-w-md mx-auto">
+            <div className="max-w-md mx-auto" style={{ backgroundColor: "rgba(255,255,255,0.6)", padding: "2rem 2.5rem", border: "1px solid rgba(168,137,90,0.18)", backdropFilter: "blur(4px)" }}>
               <p className="font-golos mb-10" style={{ color: "var(--muted-text)", fontSize: "0.68rem", letterSpacing: "0.28em", textTransform: "uppercase" }}>
                 программа вечера
               </p>
               <div className="space-y-6">
                 {[
-                  { time: "15:00", event: "Торжественная церемония" },
-                  { time: "16:00", event: "Фотосессия и аперитив" },
-                  { time: "17:00", event: "Банкет и праздничный ужин" },
-                  { time: "19:00", event: "Танцы и развлечения" },
+                  { time: "16:00", event: "Торжественная церемония" },
+                  { time: "17:00", event: "Фотосессия и аперитив" },
+                  { time: "18:00", event: "Банкет и праздничный ужин" },
+                  { time: "20:00", event: "Танцы и развлечения" },
                   { time: "23:00", event: "Завершение вечера" },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-6">
@@ -157,8 +250,12 @@ export default function Index() {
       </section>
 
       {/* DRESSCODE */}
-      <section id="dresscode" className="py-28 px-6" style={{ backgroundColor: "rgba(201,168,168,0.1)" }}>
-        <div className="max-w-4xl mx-auto">
+      <section id="dresscode" className="relative py-28 px-6 overflow-hidden">
+        <div className="absolute inset-0 z-0 pointer-events-none" style={{ transform: "scaleX(-1)" }}>
+          <img src="https://cdn.poehali.dev/files/c00b9751-aa29-4f9f-95d1-1bff2e177e39.png"
+            alt="" className="w-full h-full object-cover" style={{ opacity: 0.13 }} />
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto">
 
           <div className="text-center mb-20">
             <p className="font-golos mb-4" style={{ color: "var(--gold)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase" }}>

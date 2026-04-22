@@ -1,384 +1,408 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
-const WEDDING_DATE = new Date("2025-07-20T16:00:00");
-
-const IMG_HERO = "https://cdn.poehali.dev/files/f9901d45-151b-473d-9052-a277482de225.jpg";
-const IMG_FLOWERS = "https://cdn.poehali.dev/projects/644a90fd-2005-47e5-8f2a-6e09bba79dbc/files/4680931c-68bc-4f68-8343-c49731154317.jpg";
-const IMG_TABLE = "https://cdn.poehali.dev/projects/644a90fd-2005-47e5-8f2a-6e09bba79dbc/files/ad35d2bf-91f9-407e-99f6-c3c2a5b1fa00.jpg";
-const IMG_BOUQUET = "https://cdn.poehali.dev/projects/644a90fd-2005-47e5-8f2a-6e09bba79dbc/files/ffce0604-9560-44ac-997c-3ccc14c447f3.jpg";
-const IMG_ARCH = "https://cdn.poehali.dev/projects/644a90fd-2005-47e5-8f2a-6e09bba79dbc/files/cd8a2020-0eea-4e69-ac47-62fda8c69ca2.jpg";
-
-function useCountdown(target: Date) {
-  const calc = () => {
-    const diff = target.getTime() - Date.now();
-    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    return {
-      days: Math.floor(diff / 86400000),
-      hours: Math.floor((diff % 86400000) / 3600000),
-      minutes: Math.floor((diff % 3600000) / 60000),
-      seconds: Math.floor((diff % 60000) / 1000),
-    };
-  };
-  const [time, setTime] = useState(calc);
-  useEffect(() => {
-    const t = setInterval(() => setTime(calc()), 1000);
-    return () => clearInterval(t);
-  }, []);
-  return time;
-}
+const HERO_IMAGE = "https://cdn.poehali.dev/projects/644a90fd-2005-47e5-8f2a-6e09bba79dbc/files/4680931c-68bc-4f68-8343-c49731154317.jpg";
 
 export default function Index() {
-  const countdown = useCountdown(WEDDING_DATE);
-  const [form, setForm] = useState({ name: "", phone: "", guests: "1", attendance: "yes", comment: "" });
+  const [form, setForm] = useState({
+    name: "",
+    guests: "1",
+    attendance: "yes",
+    dietary: "",
+    message: "",
+  });
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    await new Promise(r => setTimeout(r, 800));
     setSubmitted(true);
-    setLoading(false);
   };
 
   return (
     <div className="min-h-screen texture-bg" style={{ backgroundColor: "var(--cream)" }}>
 
-      {/* ── HERO ── */}
-      <section className="relative overflow-hidden" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <img src={IMG_HERO} alt="" className="w-full h-full object-cover" style={{ opacity: 0.28 }} />
+      {/* NAV */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center gap-8 py-5"
+        style={{ color: "var(--muted-text)", backgroundColor: "rgba(247,243,238,0.92)", backdropFilter: "blur(8px)", borderBottom: "1px solid rgba(184,151,106,0.15)" }}>
+        {["#details|Детали", "#dresscode|Дресс-код", "#rsvp|Подтверждение", "#contacts|Контакты"].map((item) => {
+          const [href, label] = item.split("|");
+          return (
+            <a key={href} href={href}
+              className="font-golos transition-colors duration-300 hover:opacity-60"
+              style={{ color: "var(--muted-text)", fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+              {label}
+            </a>
+          );
+        })}
+      </nav>
+
+      {/* HERO */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img src={HERO_IMAGE} alt="Wedding" className="w-full h-full object-cover"
+            style={{ filter: "brightness(0.32) saturate(0.65)" }} />
         </div>
 
-        <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-20 w-full">
-          <div className="w-full max-w-2xl mx-auto px-8 py-14" style={{ border: "1px solid rgba(168,137,90,0.45)" }}>
+        <div className="relative z-10 text-center px-6">
+          <p className="animate-fade-in delay-100 font-golos mb-10"
+            style={{ color: "rgba(247,243,238,0.55)", fontSize: "0.7rem", letterSpacing: "0.4em", textTransform: "uppercase" }}>
+            приглашение на свадьбу
+          </p>
 
-            <p className="font-golos animate-fade-in delay-100" style={{ fontSize: "0.62rem", letterSpacing: "0.42em", textTransform: "uppercase", color: "var(--muted-text)", marginBottom: "1.5rem" }}>
-              Приглашение на свадьбу
+          <h1 className="animate-fade-in-up delay-200 font-cormorant font-light leading-none mb-3"
+            style={{ fontSize: "clamp(4.5rem, 13vw, 10rem)", color: "var(--cream)", letterSpacing: "-0.01em" }}>
+            Алина
+          </h1>
+
+          <p className="animate-fade-in delay-400 font-cormorant italic"
+            style={{ fontSize: "2rem", color: "rgba(184,151,106,0.75)", letterSpacing: "0.1em", margin: "0.5rem 0" }}>
+            &amp;
+          </p>
+
+          <h1 className="animate-fade-in-up delay-300 font-cormorant font-light leading-none mb-14"
+            style={{ fontSize: "clamp(4.5rem, 13vw, 10rem)", color: "var(--cream)", letterSpacing: "-0.01em" }}>
+            Михаил
+          </h1>
+
+          <div className="animate-fade-in delay-700 flex items-center justify-center gap-5 mb-16">
+            <span style={{ width: "40px", height: "1px", background: "rgba(184,151,106,0.5)", display: "block" }} />
+            <p className="font-golos font-light" style={{ color: "rgba(247,243,238,0.7)", letterSpacing: "0.2em", fontSize: "0.85rem" }}>
+              14 июня 2025
             </p>
-
-            <h1 className="font-cormorant animate-fade-in-up delay-200" style={{ fontSize: "clamp(3rem, 10vw, 6.5rem)", fontWeight: 400, fontStyle: "italic", color: "var(--dark)", lineHeight: 1.1 }}>
-              Анна & Дмитрий
-            </h1>
-
-            <div className="gold-divider animate-fade-in delay-300" style={{ margin: "16px 0" }}>
-              <span style={{ color: "var(--gold)", fontSize: "10px" }}>♥</span>
-            </div>
-
-            <p className="font-cormorant animate-fade-in delay-500" style={{ fontSize: "clamp(1.8rem, 5vw, 2.8rem)", fontWeight: 300, color: "var(--dark)", letterSpacing: "0.12em" }}>
-              20 | 07 | 2025
-            </p>
-
-            <div className="gold-divider animate-fade-in delay-500" style={{ margin: "16px 0" }}>
-              <span style={{ color: "var(--gold)", fontSize: "10px" }}>♥</span>
-            </div>
-
-            <p className="font-golos animate-fade-in delay-700" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--muted-text)", lineHeight: 1.9, marginTop: "8px" }}>
-              Будем рады разделить с вами<br />этот особенный день!
-            </p>
+            <span style={{ width: "40px", height: "1px", background: "rgba(184,151,106,0.5)", display: "block" }} />
           </div>
 
-          <a href="#welcome" style={{ marginTop: "2rem", color: "rgba(74,55,40,0.32)" }} className="animate-fade-in delay-900">
-            <Icon name="ChevronDown" size={22} />
+          <a href="#details" className="animate-fade-in delay-900 inline-block font-golos"
+            style={{
+              color: "var(--cream)", border: "1px solid rgba(184,151,106,0.5)",
+              padding: "13px 36px", fontSize: "0.7rem", letterSpacing: "0.15em", textTransform: "uppercase",
+              transition: "all 0.35s ease"
+            }}
+            onMouseEnter={e => { (e.target as HTMLElement).style.backgroundColor = "rgba(184,151,106,0.2)"; }}
+            onMouseLeave={e => { (e.target as HTMLElement).style.backgroundColor = "transparent"; }}>
+            Подробнее
           </a>
         </div>
-      </section>
 
-      {/* ── WELCOME ── */}
-      <section id="welcome" style={{ backgroundColor: "var(--cream)", borderTop: "1px solid rgba(168,137,90,0.12)" }}>
-        <div className="max-w-5xl mx-auto px-6 py-20" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center" }}>
-
-          <div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginBottom: "1.5rem" }}>
-              <span style={{ color: "var(--gold)", fontSize: "1.6rem" }}>✿</span>
-              <p className="font-golos" style={{ fontSize: "0.62rem", letterSpacing: "0.32em", textTransform: "uppercase", color: "var(--gold)", marginTop: "6px" }}>
-                Дорогие наши!
-              </p>
-              <div className="gold-divider" style={{ justifyContent: "flex-start", margin: "6px 0 0" }}>
-                <span style={{ color: "var(--gold)", fontSize: "10px" }}>♥</span>
-              </div>
-            </div>
-
-            <p className="font-golos" style={{ color: "var(--muted-text)", fontSize: "0.92rem", lineHeight: 1.75, marginBottom: "1.5rem" }}>
-              Мы хотим, чтобы этот день стал незабываемым для нас и для наших близких. Приглашаем вас разделить с нами радость нашей свадьбы!
-            </p>
-
-            <p className="font-cormorant" style={{ fontStyle: "italic", fontSize: "2rem", color: "var(--gold)", lineHeight: 1.2, marginBottom: "8px" }}>
-              Ждём вас!
-            </p>
-            <span style={{ color: "var(--gold)", fontSize: "10px" }}>♥</span>
-          </div>
-
-          <div style={{ position: "relative" }}>
-            <div style={{ overflow: "hidden", borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%", aspectRatio: "1", maxWidth: "320px", margin: "0 auto" }}>
-              <img src={IMG_FLOWERS} alt="Свадебные цветы" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            </div>
-          </div>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-fade-in delay-1100"
+          style={{ color: "rgba(247,243,238,0.35)" }}>
+          <Icon name="ChevronDown" size={20} />
         </div>
       </section>
 
-      {/* ── DETAILS ── */}
-      <section id="details" style={{ backgroundColor: "var(--beige-section)" }}>
-        <div className="max-w-5xl mx-auto px-6 py-20">
+      {/* DETAILS */}
+      <section id="details" className="py-28 px-6">
+        <div className="max-w-4xl mx-auto">
 
-          <div className="text-center" style={{ marginBottom: "3.5rem" }}>
-            <p className="font-golos" style={{ fontSize: "0.65rem", letterSpacing: "0.38em", textTransform: "uppercase", color: "var(--gold)" }}>
-              Детали
+          <div className="text-center mb-20">
+            <p className="font-golos mb-4" style={{ color: "var(--gold)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase" }}>
+              детали события
             </p>
-            <div className="gold-divider" style={{ margin: "10px 0 0" }}>
-              <span style={{ color: "var(--gold)", fontSize: "10px" }}>♥</span>
-            </div>
+            <h2 className="font-cormorant font-light mb-6" style={{ fontSize: "3.2rem", color: "var(--dark)" }}>
+              Наш особенный день
+            </h2>
+            <div className="section-divider" />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "2rem" }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: "Calendar", label: "Дата", lines: ["20 июля 2025", "(воскресенье)"] },
-              { icon: "CircleDot", label: "Церемония", lines: ["16:00", "Выездная регистрация"] },
-              { icon: "UtensilsCrossed", label: "Банкет", lines: ["18:00", "Праздничный ужин"] },
-              { icon: "MapPin", label: "Место", lines: ["Загородный отель", "«Счастье»", "Московская обл.,", "д. Сосновка, 15"] },
+              { icon: "Calendar", label: "Дата", title: "14 июня", sub: "2025 года", footer: "Суббота" },
+              { icon: "Clock", label: "Время", title: "15:00", sub: "Церемония", footer: "Банкет с 17:00" },
+              { icon: "MapPin", label: "Место", title: "Villa Rosa", sub: "Загородный клуб", footer: "Московская обл., Истра" },
             ].map((item, i) => (
-              <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "12px" }}>
-                <div style={{ width: "50px", height: "50px", border: "1px solid rgba(168,137,90,0.48)", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Icon name={item.icon as "Calendar"} fallback="Circle" size={20} style={{ color: "var(--gold)" }} />
+              <div key={i} className="detail-card text-center py-12 px-8 border"
+                style={{ borderColor: "rgba(184,151,106,0.25)", backgroundColor: "rgba(255,255,255,0.5)" }}>
+                <div className="mb-6 flex justify-center">
+                  <Icon name={item.icon as "Calendar"} size={26} style={{ color: "var(--gold)" }} />
                 </div>
-                <p className="font-golos" style={{ fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "var(--muted-text)" }}>
+                <p className="font-golos mb-3" style={{ color: "var(--muted-text)", fontSize: "0.68rem", letterSpacing: "0.25em", textTransform: "uppercase" }}>
                   {item.label}
                 </p>
-                <div>
-                  {item.lines.map((l, j) => (
-                    <p key={j} className="font-golos" style={{ fontSize: j === 0 ? "1rem" : "0.78rem", color: j === 0 ? "var(--dark)" : "var(--muted-text)", lineHeight: 1.55 }}>
-                      {l}
-                    </p>
-                  ))}
+                <p className="font-cormorant font-light text-3xl mb-1" style={{ color: "var(--dark)" }}>{item.title}</p>
+                <p className="font-cormorant italic text-xl" style={{ color: "var(--gold)" }}>{item.sub}</p>
+                <div className="mt-6 pt-5" style={{ borderTop: "1px solid rgba(184,151,106,0.18)" }}>
+                  <p className="font-golos text-sm" style={{ color: "var(--muted-text)" }}>{item.footer}</p>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ── COUNTDOWN ── */}
-      <section style={{ backgroundColor: "var(--cream2)", borderTop: "1px solid rgba(168,137,90,0.12)", borderBottom: "1px solid rgba(168,137,90,0.12)" }}>
-        <div className="max-w-4xl mx-auto px-6 py-16">
-          <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
-            <img src={IMG_BOUQUET} alt="" style={{ width: "70px", height: "110px", objectFit: "cover", borderRadius: "4px", opacity: 0.45, flexShrink: 0, display: "none" }} className="md:block" />
-            <div style={{ flex: 1 }}>
-              <p className="font-golos text-center" style={{ fontSize: "0.62rem", letterSpacing: "0.38em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "10px" }}>
-                До нашей свадьбы осталось
+          {/* Программа */}
+          <div className="mt-20 text-center">
+            <div className="max-w-md mx-auto">
+              <p className="font-golos mb-10" style={{ color: "var(--muted-text)", fontSize: "0.68rem", letterSpacing: "0.28em", textTransform: "uppercase" }}>
+                программа вечера
               </p>
-              <div className="gold-divider" style={{ marginBottom: "2rem" }}>
-                <span style={{ color: "var(--gold)", fontSize: "10px" }}>♥</span>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", textAlign: "center" }}>
+              <div className="space-y-6">
                 {[
-                  { val: countdown.days, label: "Дня" },
-                  { val: countdown.hours, label: "Часов" },
-                  { val: countdown.minutes, label: "Минут" },
-                  { val: countdown.seconds, label: "Секунд" },
+                  { time: "15:00", event: "Торжественная церемония" },
+                  { time: "16:00", event: "Фотосессия и аперитив" },
+                  { time: "17:00", event: "Банкет и праздничный ужин" },
+                  { time: "19:00", event: "Танцы и развлечения" },
+                  { time: "23:00", event: "Завершение вечера" },
                 ].map((item, i) => (
-                  <div key={i}>
-                    <div className="font-cormorant" style={{ fontSize: "clamp(2.5rem, 8vw, 5rem)", fontWeight: 300, color: "var(--dark)", lineHeight: 1 }}>
-                      {String(item.val).padStart(2, "0")}
-                    </div>
-                    <div className="font-golos" style={{ fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--muted-text)", marginTop: "6px" }}>
-                      {item.label}
-                    </div>
+                  <div key={i} className="flex items-center gap-6">
+                    <span className="font-cormorant text-xl w-14 text-right shrink-0" style={{ color: "var(--gold)" }}>
+                      {item.time}
+                    </span>
+                    <div className="shrink-0" style={{ width: "1px", height: "32px", backgroundColor: "rgba(184,151,106,0.28)" }} />
+                    <span className="font-golos text-sm text-left" style={{ color: "var(--dark)" }}>{item.event}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
+
         </div>
       </section>
 
-      {/* ── DRESSCODE + WISHES ── */}
-      <section style={{ backgroundColor: "var(--beige-section)" }}>
-        <div className="max-w-5xl mx-auto px-6 py-20" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem" }}>
+      {/* DRESSCODE */}
+      <section id="dresscode" className="py-28 px-6" style={{ backgroundColor: "rgba(201,168,168,0.1)" }}>
+        <div className="max-w-4xl mx-auto">
 
-          <div>
-            <p className="font-golos" style={{ fontSize: "0.62rem", letterSpacing: "0.38em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "8px" }}>
+          <div className="text-center mb-20">
+            <p className="font-golos mb-4" style={{ color: "var(--gold)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase" }}>
+              пожелания к образу
+            </p>
+            <h2 className="font-cormorant font-light mb-6" style={{ fontSize: "3.2rem", color: "var(--dark)" }}>
               Дресс-код
-            </p>
-            <div className="gold-divider" style={{ justifyContent: "flex-start", marginBottom: "2rem" }}>
-              <span style={{ color: "var(--gold)", fontSize: "10px" }}>♥</span>
-            </div>
-            <div style={{ display: "flex", gap: "12px", marginBottom: "1.5rem" }}>
-              {["#E8E0D8", "#C5B8AA", "#9AA896", "#8A8078"].map((c, i) => (
-                <div key={i} style={{ width: "36px", height: "36px", borderRadius: "50%", backgroundColor: c, border: "1.5px solid rgba(168,137,90,0.28)", flexShrink: 0 }} />
-              ))}
-            </div>
-            <p className="font-golos" style={{ fontSize: "0.88rem", color: "var(--muted-text)", lineHeight: 1.72 }}>
-              Мы будем рады, если вы поддержите цветовую гамму нашей свадьбы
-            </p>
+            </h2>
+            <div className="section-divider" />
           </div>
 
-          <div>
-            <p className="font-golos" style={{ fontSize: "0.62rem", letterSpacing: "0.38em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "8px" }}>
-              Пожелания
-            </p>
-            <div className="gold-divider" style={{ justifyContent: "flex-start", marginBottom: "2rem" }}>
-              <span style={{ color: "var(--gold)", fontSize: "10px" }}>♥</span>
-            </div>
-            <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
-              <Icon name="Mail" size={28} style={{ color: "var(--gold)", opacity: 0.65, flexShrink: 0, marginTop: "2px" }} />
-              <p className="font-golos" style={{ fontSize: "0.88rem", color: "var(--muted-text)", lineHeight: 1.72 }}>
-                Ваши тёплые слова и пожелания для нас — лучший подарок! Но если вы хотите порадовать нас по-другому, будем благодарны за вклад в бюджет нашей семьи.
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+
+            <div>
+              <p className="font-golos mb-8" style={{ color: "var(--muted-text)", fontSize: "0.68rem", letterSpacing: "0.25em", textTransform: "uppercase" }}>
+                цветовая палитра
+              </p>
+              <div className="flex gap-4 mb-10">
+                {[
+                  { color: "#F7F3EE", label: "Крем" },
+                  { color: "#C9A8A8", label: "Роза" },
+                  { color: "#B8976A", label: "Золото" },
+                  { color: "#8A9B8E", label: "Шалфей" },
+                  { color: "#3D2E22", label: "Тёмный" },
+                ].map((c, i) => (
+                  <div key={i} className="flex flex-col items-center gap-2">
+                    <div className="w-10 h-10 rounded-full border"
+                      style={{ backgroundColor: c.color, borderColor: "rgba(184,151,106,0.3)" }} />
+                    <span style={{ color: "var(--muted-text)", fontSize: "9px", fontFamily: "Golos Text, sans-serif" }}>{c.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              <h3 className="font-cormorant font-light text-2xl mb-4" style={{ color: "var(--dark)" }}>
+                Элегантный вечерний стиль
+              </h3>
+              <p className="font-golos leading-relaxed" style={{ color: "var(--muted-text)", fontSize: "0.9rem" }}>
+                Мы мечтаем о нежной, утончённой атмосфере нашего праздника. Пожалуйста, выбирайте наряды в пастельных и землистых тонах — это создаст особое настроение нашего вечера.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ── GALLERY ── */}
-      <section style={{ backgroundColor: "var(--cream)" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", height: "260px" }}>
-          <div style={{ backgroundColor: "var(--cream2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ width: "100px", height: "100px", border: "1px solid rgba(168,137,90,0.5)", borderRadius: "50%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-              <span className="font-cormorant" style={{ fontSize: "2rem", color: "var(--gold)", fontWeight: 400, lineHeight: 1 }}>А</span>
-              <span style={{ color: "var(--gold)", fontSize: "8px" }}>♥</span>
-              <span className="font-cormorant" style={{ fontSize: "2rem", color: "var(--gold)", fontWeight: 400, lineHeight: 1 }}>Д</span>
-            </div>
-          </div>
-          <div style={{ overflow: "hidden" }}>
-            <img src={IMG_TABLE} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          </div>
-          <div style={{ overflow: "hidden" }}>
-            <img src={IMG_BOUQUET} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          </div>
-          <div style={{ overflow: "hidden" }}>
-            <img src={IMG_ARCH} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          </div>
-        </div>
-      </section>
-
-      {/* ── RSVP ── */}
-      <section id="rsvp" style={{ backgroundColor: "var(--cream)" }}>
-        <div className="max-w-5xl mx-auto px-6 py-20" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "start" }}>
-
-          <div>
-            <p className="font-golos" style={{ fontSize: "0.82rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dark)", lineHeight: 1.6 }}>
-              Подтвердите, пожалуйста,<br />своё присутствие
-            </p>
-            <div className="gold-divider" style={{ justifyContent: "flex-start", margin: "12px 0 18px" }}>
-              <span style={{ color: "var(--gold)", fontSize: "10px" }}>♥</span>
-            </div>
-            <p className="font-golos" style={{ fontSize: "0.85rem", color: "var(--muted-text)" }}>
-              Будем ждать ваш ответ до 01.07.2025
-            </p>
-
-            <div style={{ marginTop: "2.5rem" }}>
-              <p className="font-golos" style={{ fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "var(--muted-text)", marginBottom: "12px" }}>
-                или свяжитесь с нами:
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Icon name="Phone" size={13} style={{ color: "var(--gold)" }} />
-                  <span className="font-golos" style={{ fontSize: "0.85rem", color: "var(--dark)" }}>+7 (000) 123-45-67 — Анна</span>
+            <div className="space-y-8">
+              <div>
+                <div className="flex items-center gap-3 mb-5">
+                  <Icon name="Check" size={14} style={{ color: "var(--gold)" }} />
+                  <p className="font-golos" style={{ color: "var(--dark)", fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                    Рекомендуем
+                  </p>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Icon name="Phone" size={13} style={{ color: "var(--gold)" }} />
-                  <span className="font-golos" style={{ fontSize: "0.85rem", color: "var(--dark)" }}>+7 (999) 765-43-21 — Дмитрий</span>
+                <ul className="space-y-3">
+                  {[
+                    "Вечерние платья и костюмы",
+                    "Нежные пастельные оттенки",
+                    "Кремовый, пудровый, бежевый",
+                    "Золотые и бронзовые акценты",
+                    "Шалфей, пыльная роза, лиловый",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 font-golos text-sm" style={{ color: "var(--muted-text)" }}>
+                      <span style={{ color: "var(--gold)", marginTop: "1px" }}>—</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div style={{ borderTop: "1px solid rgba(184,151,106,0.2)", paddingTop: "28px" }}>
+                <div className="flex items-center gap-3 mb-5">
+                  <Icon name="X" size={14} style={{ color: "var(--rose)" }} />
+                  <p className="font-golos" style={{ color: "var(--dark)", fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                    Пожалуйста, без
+                  </p>
                 </div>
+                <ul className="space-y-3">
+                  {[
+                    "Белый и ivory (цвет невесты)",
+                    "Чёрный цвет",
+                    "Яркие неоновые оттенки",
+                    "Повседневная одежда",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 font-golos text-sm" style={{ color: "var(--muted-text)" }}>
+                      <span style={{ color: "var(--rose)", marginTop: "1px" }}>—</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
-            <p className="font-cormorant" style={{ fontStyle: "italic", fontSize: "1.35rem", color: "var(--muted-text)", marginTop: "3.5rem" }}>
-              С любовью, Анна и Дмитрий
-            </p>
           </div>
 
-          <div>
-            {submitted ? (
-              <div style={{ textAlign: "center", padding: "4rem 2rem", border: "1px solid rgba(168,137,90,0.28)", backgroundColor: "rgba(255,255,255,0.4)" }}>
-                <Icon name="Heart" size={30} style={{ color: "var(--gold)", margin: "0 auto 16px" }} />
-                <p className="font-cormorant" style={{ fontSize: "2rem", fontWeight: 300, color: "var(--dark)" }}>Спасибо!</p>
-                <p className="font-golos" style={{ fontSize: "0.88rem", color: "var(--muted-text)", marginTop: "8px" }}>
-                  Ваш ответ принят. Мы с нетерпением вас ждём!
-                </p>
+        </div>
+      </section>
+
+      {/* RSVP */}
+      <section id="rsvp" className="py-28 px-6">
+        <div className="max-w-2xl mx-auto">
+
+          <div className="text-center mb-16">
+            <p className="font-golos mb-4" style={{ color: "var(--gold)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase" }}>
+              ваш ответ
+            </p>
+            <h2 className="font-cormorant font-light mb-4" style={{ fontSize: "3.2rem", color: "var(--dark)" }}>
+              Подтверждение
+            </h2>
+            <p className="font-cormorant italic text-xl mb-6" style={{ color: "var(--muted-text)" }}>
+              Просим ответить до 1 мая 2025
+            </p>
+            <div className="section-divider" />
+          </div>
+
+          {submitted ? (
+            <div className="text-center py-20 border"
+              style={{ borderColor: "rgba(184,151,106,0.25)", backgroundColor: "rgba(255,255,255,0.5)" }}>
+              <div className="mb-6 flex justify-center">
+                <Icon name="Heart" size={30} style={{ color: "var(--rose)" }} />
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+              <h3 className="font-cormorant font-light text-3xl mb-3" style={{ color: "var(--dark)" }}>Спасибо!</h3>
+              <p className="font-golos text-sm" style={{ color: "var(--muted-text)" }}>
+                Мы получили ваш ответ и с нетерпением ждём встречи.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
 
+              <div>
+                <label className="block font-golos mb-2"
+                  style={{ color: "var(--muted-text)", fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                  Ваше имя
+                </label>
+                <input type="text" required value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="w-full py-3 px-4 border bg-transparent font-golos text-sm"
+                  style={{ borderColor: "rgba(184,151,106,0.3)", color: "var(--dark)" }}
+                  placeholder="Имя и фамилия" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="font-golos" style={{ display: "block", fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--muted-text)", marginBottom: "6px" }}>
-                    Ваше имя
+                  <label className="block font-golos mb-2"
+                    style={{ color: "var(--muted-text)", fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                    Присутствие
                   </label>
-                  <input type="text" required value={form.name}
-                    onChange={e => setForm({ ...form, name: e.target.value })}
-                    className="font-golos"
-                    style={{ width: "100%", padding: "11px 14px", border: "1px solid rgba(168,137,90,0.32)", color: "var(--dark)", background: "rgba(255,255,255,0.5)", fontSize: "0.88rem" }}
-                    placeholder="Имя и фамилия" />
+                  <select value={form.attendance}
+                    onChange={(e) => setForm({ ...form, attendance: e.target.value })}
+                    className="w-full py-3 px-4 border bg-transparent font-golos text-sm cursor-pointer"
+                    style={{ borderColor: "rgba(184,151,106,0.3)", color: "var(--dark)" }}>
+                    <option value="yes">С радостью буду</option>
+                    <option value="no">К сожалению, не смогу</option>
+                  </select>
                 </div>
-
                 <div>
-                  <label className="font-golos" style={{ display: "block", fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--muted-text)", marginBottom: "6px" }}>
-                    Телефон
+                  <label className="block font-golos mb-2"
+                    style={{ color: "var(--muted-text)", fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                    Гостей
                   </label>
-                  <input type="tel" value={form.phone}
-                    onChange={e => setForm({ ...form, phone: e.target.value })}
-                    className="font-golos"
-                    style={{ width: "100%", padding: "11px 14px", border: "1px solid rgba(168,137,90,0.32)", color: "var(--dark)", background: "rgba(255,255,255,0.5)", fontSize: "0.88rem" }}
-                    placeholder="+7 (___) ___-__-__" />
+                  <select value={form.guests}
+                    onChange={(e) => setForm({ ...form, guests: e.target.value })}
+                    className="w-full py-3 px-4 border bg-transparent font-golos text-sm cursor-pointer"
+                    style={{ borderColor: "rgba(184,151,106,0.3)", color: "var(--dark)" }}>
+                    {["1", "2", "3", "4"].map(n => (
+                      <option key={n} value={n}>{n} {n === "1" ? "гость" : "гостя"}</option>
+                    ))}
+                  </select>
                 </div>
+              </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                  <div>
-                    <label className="font-golos" style={{ display: "block", fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--muted-text)", marginBottom: "6px" }}>
-                      Присутствие
-                    </label>
-                    <select value={form.attendance} onChange={e => setForm({ ...form, attendance: e.target.value })}
-                      className="font-golos"
-                      style={{ width: "100%", padding: "11px 14px", border: "1px solid rgba(168,137,90,0.32)", color: "var(--dark)", background: "rgba(255,255,255,0.5)", fontSize: "0.88rem", cursor: "pointer" }}>
-                      <option value="yes">С радостью буду</option>
-                      <option value="no">Не смогу</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="font-golos" style={{ display: "block", fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--muted-text)", marginBottom: "6px" }}>
-                      Гостей
-                    </label>
-                    <select value={form.guests} onChange={e => setForm({ ...form, guests: e.target.value })}
-                      className="font-golos"
-                      style={{ width: "100%", padding: "11px 14px", border: "1px solid rgba(168,137,90,0.32)", color: "var(--dark)", background: "rgba(255,255,255,0.5)", fontSize: "0.88rem", cursor: "pointer" }}>
-                      {["1","2","3","4"].map(n => <option key={n} value={n}>{n}</option>)}
-                    </select>
-                  </div>
-                </div>
+              <div>
+                <label className="block font-golos mb-2"
+                  style={{ color: "var(--muted-text)", fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                  Пожелания к меню
+                </label>
+                <input type="text" value={form.dietary}
+                  onChange={(e) => setForm({ ...form, dietary: e.target.value })}
+                  className="w-full py-3 px-4 border bg-transparent font-golos text-sm"
+                  style={{ borderColor: "rgba(184,151,106,0.3)", color: "var(--dark)" }}
+                  placeholder="Аллергии, вегетарианское, халяль…" />
+              </div>
 
-                <div>
-                  <label className="font-golos" style={{ display: "block", fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--muted-text)", marginBottom: "6px" }}>
-                    Пожелания / ограничения в питании
-                  </label>
-                  <textarea rows={3} value={form.comment}
-                    onChange={e => setForm({ ...form, comment: e.target.value })}
-                    className="font-golos"
-                    style={{ width: "100%", padding: "11px 14px", border: "1px solid rgba(168,137,90,0.32)", color: "var(--dark)", background: "rgba(255,255,255,0.5)", fontSize: "0.88rem", resize: "none" }}
-                    placeholder="Аллергии, вегетарианское…" />
-                </div>
+              <div>
+                <label className="block font-golos mb-2"
+                  style={{ color: "var(--muted-text)", fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                  Пожелания молодожёнам
+                </label>
+                <textarea rows={4} value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  className="w-full py-3 px-4 border bg-transparent font-golos text-sm resize-none"
+                  style={{ borderColor: "rgba(184,151,106,0.3)", color: "var(--dark)" }}
+                  placeholder="Ваши тёплые слова…" />
+              </div>
 
-                <button type="submit" disabled={loading} className="btn-gold"
-                  style={{ width: "100%", opacity: loading ? 0.72 : 1, marginTop: "4px" }}>
-                  {loading ? "Отправляем…" : "Подтвердить"}
+              <div className="text-center pt-4">
+                <button type="submit" className="btn-wedding">
+                  Отправить подтверждение
                 </button>
+              </div>
 
-              </form>
-            )}
-          </div>
+            </form>
+          )}
 
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer style={{ backgroundColor: "var(--cream2)", borderTop: "1px solid rgba(168,137,90,0.13)", padding: "28px 24px", textAlign: "center" }}>
-        <p className="font-cormorant" style={{ fontStyle: "italic", fontSize: "1.1rem", color: "var(--muted-text)" }}>
-          С любовью, Анна и Дмитрий
-        </p>
-        <p className="font-golos" style={{ fontSize: "0.58rem", letterSpacing: "0.22em", color: "rgba(138,117,104,0.45)", textTransform: "uppercase", marginTop: "6px" }}>
-          20 · 07 · 2025
-        </p>
-      </footer>
+      {/* CONTACTS */}
+      <section id="contacts" className="py-24 px-6" style={{ backgroundColor: "var(--dark)" }}>
+        <div className="max-w-3xl mx-auto text-center">
+
+          <p className="font-golos mb-4" style={{ color: "rgba(184,151,106,0.65)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase" }}>
+            есть вопросы?
+          </p>
+          <h2 className="font-cormorant font-light mb-6" style={{ fontSize: "2.8rem", color: "var(--cream)" }}>
+            Свяжитесь с нами
+          </h2>
+          <div className="section-divider mb-14" style={{ backgroundColor: "rgba(184,151,106,0.35)" }} />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+            {[
+              { role: "Координатор свадьбы", name: "Елена", phone: "+7 999 123-45-67", extra: "@wedding_elena" },
+              { role: "Общие вопросы", name: "Михаил", phone: "+7 999 765-43-21", extra: "wedding@example.com" },
+            ].map((c, i) => (
+              <div key={i}>
+                <p className="font-golos mb-4" style={{ color: "rgba(247,243,238,0.38)", fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                  {c.role}
+                </p>
+                <p className="font-cormorant font-light text-2xl mb-3" style={{ color: "var(--cream)" }}>{c.name}</p>
+                <p className="font-golos text-sm mb-1" style={{ color: "var(--gold)" }}>{c.phone}</p>
+                <p className="font-golos text-sm" style={{ color: "rgba(247,243,238,0.45)" }}>{c.extra}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ borderTop: "1px solid rgba(184,151,106,0.18)", paddingTop: "48px" }}>
+            <p className="font-cormorant italic text-2xl mb-2" style={{ color: "rgba(247,243,238,0.5)" }}>
+              Мы ждём вас с любовью
+            </p>
+            <p className="font-cormorant font-light" style={{ fontSize: "2.8rem", color: "var(--cream)" }}>
+              Алина & Михаил
+            </p>
+            <p className="font-golos mt-4" style={{ color: "rgba(184,151,106,0.45)", fontSize: "0.7rem", letterSpacing: "0.25em" }}>
+              14 · 06 · 2025
+            </p>
+          </div>
+
+        </div>
+      </section>
 
     </div>
   );
